@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import by from 'sort-by';
 import { Link } from 'react-router-dom';
 import ItemCreator from './ItemCreator.jsx';
+import Portfolio from './Portfolio.jsx';
 
 class Corpora extends Component {
 
   render() {
     let items = this._getItems();
+    let options = this._getOptions();
+    //let sort = this._sortByAttribute;
     let count = this.props.items.length;
     let total = this.props.from;
     let listIds = this.props.ids.map((corpus) =>
@@ -18,6 +22,9 @@ class Corpora extends Component {
             {listIds}
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>
+          <select id="attribut" onChange={this._sortByAttribute(this.props.items)}>
+            {options}
+          </select>
           <div className="Items m-3">
             {items}
           </div>
@@ -30,6 +37,27 @@ class Corpora extends Component {
     return this.props.items.map(item =>
       <Item key={item.id} item={item} />
     );
+  }
+
+  _getOptions() {
+    let arr = [];
+    for (var i = 0; i < this.props.items.length; i++) {
+      let keys = Object.keys(this.props.items[i]);
+      for (var j = 0; j < keys.length; j++) {
+        if (!arr.concat(['couchapp', 'topic', 'corpus', 'id']).includes(keys[j])) {
+          arr.push(keys[j]);
+        }
+      }
+    }
+    return arr.map(attribute =>
+      <option value={attribute}> {attribute} </option>
+    );
+  }
+
+  _sortByAttribute = items => e => {
+    let select = document.getElementById('attribut');
+    let attribut = select.options[select.selectedIndex].value;
+    this.setState({items: items.sort(by(attribut))});
   }
 
 }
