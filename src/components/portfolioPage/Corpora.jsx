@@ -22,7 +22,8 @@ class Corpora extends Component {
             {listIds}
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>
-          <select id="attribut" onChange={this._sortByAttribute(this.props.items)}>
+          {/*this._sortByAttribute(this.props.items)*/}
+          <select id="attribut" onChange={this.props.portfolio.render}>
             {options}
           </select>
           <div className="Items m-3">

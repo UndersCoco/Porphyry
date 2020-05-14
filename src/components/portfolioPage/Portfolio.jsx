@@ -189,7 +189,14 @@ class Portfolio extends Component {
             }
           }
         }
-        this.setState({items:items.sort(by('name'))});
+        let select = document.getElementById('attribut');
+        let attribut = 'name';
+        if(select.options[select.selectedIndex] !== undefined) {
+          attribut = select.options[select.selectedIndex].value;
+          console.log(attribut);
+          console.log('========================================');
+        }
+        this.setState({items:items.sort(by(attribut))});
       })
       .then(x => {
         this._updateSelectedItems();
@@ -209,7 +216,7 @@ class Portfolio extends Component {
   _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
     return (
-      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} conf={conf} />
+      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} conf={conf} portfolio={this}/>
     );
   }
 }
