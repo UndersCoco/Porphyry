@@ -23,7 +23,7 @@ class Corpora extends Component {
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>
           {/*this._sortByAttribute(this.props.items)*/}
-          <select id="attribut" onChange={this.props.portfolio.render}>
+          <select id="attribut" onChange={this._sortByAttribute(this.props.items)}>
             {options}
           </select>
           <div className="Items m-3">
@@ -45,20 +45,30 @@ class Corpora extends Component {
     for (var i = 0; i < this.props.items.length; i++) {
       let keys = Object.keys(this.props.items[i]);
       for (var j = 0; j < keys.length; j++) {
-        if (!arr.concat(['couchapp', 'topic', 'corpus', 'id']).includes(keys[j])) {
+        if (!arr.concat(['couchapp', 'topic', 'corpus', 'id', 'item']).includes(keys[j])) {
           arr.push(keys[j]);
         }
       }
     }
+    arr.sort();
     return arr.map(attribute =>
       <option value={attribute}> {attribute} </option>
     );
   }
 
-  _sortByAttribute = items => e => {
+  _sortByAttribute = param => e => {
     let select = document.getElementById('attribut');
     let attribut = select.options[select.selectedIndex].value;
-    this.setState({items: items.sort(by(attribut))});
+    this.setState({items: this.props.listItems.sort(function(a, b) {
+      if (a[attribut] && b[attribut] && a[attribut][0] && b[attribut][0]) {
+        return a[attribut][0].localeCompare(b[attribut][0]);
+      } else if (!a[attribut] || !a[attribut][0]) {
+        return 1;
+      } else if (!b[attribut] || !b[attribut][0]) {
+        return -1;
+      }
+      return 0;
+    })});
   }
 
 }

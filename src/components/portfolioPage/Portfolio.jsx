@@ -65,12 +65,12 @@ class Portfolio extends Component {
 
       let intervalTime=Math.max(10000,elapsedTime*5);
       console.log("reload every ",intervalTime);
-      self._timer = setInterval(
+      /*self._timer = setInterval(
         () => {
           self._fetchAll();
         },
         intervalTime
-      );
+      );*/
     });
   }
 
@@ -189,14 +189,7 @@ class Portfolio extends Component {
             }
           }
         }
-        let select = document.getElementById('attribut');
-        let attribut = 'name';
-        if(select.options[select.selectedIndex] !== undefined) {
-          attribut = select.options[select.selectedIndex].value;
-          console.log(attribut);
-          console.log('========================================');
-        }
-        this.setState({items:items.sort(by(attribut))});
+        this.setState({items:items.sort(by('name'))});
       })
       .then(x => {
         this._updateSelectedItems();
@@ -216,7 +209,7 @@ class Portfolio extends Component {
   _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
     return (
-      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} conf={conf} portfolio={this}/>
+      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} conf={conf} listItems={this.state.items}/>
     );
   }
 }
